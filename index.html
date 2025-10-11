@@ -135,6 +135,27 @@ a.navlink.disabled{opacity:0.45; pointer-events:none; transform:none; filter:gra
   .container{grid-template-columns:1fr; padding:12px}
   .sidebar{order:2}
 }
+
+/* hamburger */
+.hamburger{
+  display:none;
+  background:transparent; border:0; color:var(--muted); font-size:22px; padding:6px 8px; border-radius:8px; cursor:pointer;
+}
+@media(max-width:900px){
+  .hamburger{display:inline-block}
+  .sidebar{position:fixed; left:0; top:0; bottom:0; z-index:10000; transform:translateX(-110%); transition:transform 280ms ease; width:260px; box-shadow: 12px 0 40px rgba(3,8,18,0.8)}
+  body.sidebar-open .sidebar{transform:translateX(0)}
+  /* dim main when sidebar open */
+  body.sidebar-open::before{content:''; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:9999}
+  /* ensure main is scrollable under overlay when closed */
+  .container{grid-template-columns: 0 1fr}
+  /* when sidebar visible, keep normal grid */
+  body.sidebar-open .container{grid-template-columns:260px 1fr}
+  /* hide large sidebar inside layout to avoid double space */
+  .sidebar{transform:translateX(-110%)}
+  body.sidebar-open .sidebar{transform:translateX(0)}
+}
+
 </style>
 </head>
 <body class="locked">
@@ -165,6 +186,7 @@ a.navlink.disabled{opacity:0.45; pointer-events:none; transform:none; filter:gra
 <div id="app" class="container" role="application" aria-label="Vocabulaire allemand">
   <aside class="sidebar" aria-hidden="false">
     <div class="brand">
+      <button id="hamburger" class="hamburger" aria-label="Ouvrir le menu">☰</button>
       <div class="logo">DE→FR</div>
       <div>
         <div class="h1">Vocabulaire Allemand</div>
@@ -714,6 +736,29 @@ document.addEventListener('keydown', (e)=>{
     const a = document.createElement('a'); a.href = href; a.download = 'vocab_patron_site_v6b.html'; document.body.appendChild(a); a.click(); a.remove();
   }
 });
+
+// hamburger toggle for mobile
+const hamburger = document.getElementById('hamburger');
+hamburger && hamburger.addEventListener('click', ()=>{
+  document.body.classList.toggle('sidebar-open');
+});
+// close sidebar when clicking outside (overlay created when open)
+document.addEventListener('click', (e)=>{
+  if(!document.body.classList.contains('sidebar-open')) return;
+  const inside = e.target.closest('.sidebar') || e.target.closest('#hamburger');
+  if(!inside){
+    document.body.classList.remove('sidebar-open');
+  }
+});
+// close sidebar when a nav link is clicked (mobile)
+document.querySelectorAll('.nav a.navlink').forEach(a=>{
+  a.addEventListener('click', ()=>{
+    if(window.innerWidth <= 900) document.body.classList.remove('sidebar-open');
+  });
+});
+// also close sidebar when overlay close (if user uses overlay)
+overlayClose && overlayClose.addEventListener('click', ()=> document.body.classList.remove('sidebar-open'));
+
 </script>
 </body>
 </html>
