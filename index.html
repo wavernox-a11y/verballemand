@@ -11,30 +11,33 @@
   font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
   --radius:12px;
   --card-w: 220px;
+  --tap: 14px;
 }
 *{box-sizing:border-box}
 html,body,#app{height:100%}
 body{
   margin:0; background:linear-gradient(180deg,#041323 0%, #081226 70%);
-  color:#e6eef6; display:flex; align-items:stretch; justify-content:center; padding:18px;
+  color:#e6eef6; display:flex; align-items:stretch; justify-content:center; padding:12px;
+  -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
 }
 
 /* container */
 .container{
   width:1150px; max-width:98vw; background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
-  border-radius:18px; padding:18px; box-shadow: 0 12px 36px rgba(3,8,18,0.8);
-  display:grid; grid-template-columns:280px 1fr; gap:18px; min-height:72vh;
+  border-radius:18px; padding:12px; box-shadow: 0 12px 36px rgba(3,8,18,0.8);
+  display:grid; grid-template-columns:280px 1fr; gap:12px; min-height:72vh;
   backdrop-filter: blur(6px) saturate(1.1);
 }
 
 /* sidebar */
 .sidebar{
-  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:var(--radius); padding:18px;
+  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:var(--radius); padding:14px;
   border:1px solid rgba(255,255,255,0.03); display:flex; flex-direction:column; gap:12px;
+  transition: transform 320ms ease, opacity 220ms ease;
 }
 .brand{display:flex; align-items:center; gap:12px}
 .logo{
-  width:64px; height:64px; border-radius:14px; display:grid; place-items:center; font-weight:800;
+  width:56px; height:56px; border-radius:12px; display:grid; place-items:center; font-weight:800;
   background:linear-gradient(135deg,var(--accent), var(--accent2)); color:#021217; box-shadow: 0 8px 26px rgba(0,0,0,0.4);
   transform: rotate(-6deg);
 }
@@ -44,7 +47,7 @@ body{
 /* nav */
 .nav{margin-top:6px; display:flex; flex-direction:column; gap:6px}
 a.navlink{
-  display:flex; gap:10px; align-items:center; padding:10px 12px; border-radius:10px; text-decoration:none; color:inherit;
+  display:flex; gap:10px; align-items:center; padding:12px; border-radius:10px; text-decoration:none; color:inherit;
   transition: all 220ms cubic-bezier(.2,.9,.3,1); font-weight:700; cursor:pointer;
 }
 a.navlink:hover{transform:translateX(6px); background:linear-gradient(90deg, rgba(255,255,255,0.02), transparent)}
@@ -58,13 +61,22 @@ a.navlink.disabled{opacity:0.45; pointer-events:none; transform:none; filter:gra
 /* main */
 .main{padding:12px; border-radius:12px; background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00)); border:1px solid rgba(255,255,255,0.02); overflow:auto; position:relative}
 
+/* header top controls (mobile hamburger) */
+.topbar{
+  display:flex; align-items:center; gap:12px; justify-content:space-between; margin-bottom:12px;
+}
+.hamburger{
+  display:none; background:transparent; border:0; color:inherit; font-size:22px; cursor:pointer; padding:8px; border-radius:8px;
+}
+.hamburger:active{transform:scale(.98)}
+
 /* header */
-.header{display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px}
+.header{display:flex; justify-content:space-between; align-items:center; gap:12px}
 .header h2{margin:0; font-size:1.1rem}
 .header .controls{display:flex; gap:8px}
 
 /* panels */
-.panel{background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent); padding:14px; border-radius:10px; margin-bottom:12px; border:1px solid rgba(255,255,255,0.02)}
+.panel{background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent); padding:12px; border-radius:10px; margin-bottom:12px; border:1px solid rgba(255,255,255,0.02)}
 
 /* vocab table */
 .table-wrap{overflow:auto; border-radius:10px}
@@ -74,7 +86,7 @@ a.navlink.disabled{opacity:0.45; pointer-events:none; transform:none; filter:gra
 .lock-icon{font-weight:900; color:var(--muted); opacity:0.9}
 
 /* flashcards improved */
-.flash-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(var(--card-w),1fr)); gap:18px; align-items:start}
+.flash-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; align-items:start}
 .card3d{perspective:1400px; height:160px; width:100%}
 .card {
   width:100%; height:160px; transform-style:preserve-3d; transition: transform 650ms cubic-bezier(.2,.9,.3,1); border-radius:12px; position:relative; box-shadow: 0 12px 30px rgba(10,20,30,0.6); cursor:pointer;
@@ -115,47 +127,39 @@ a.navlink.disabled{opacity:0.45; pointer-events:none; transform:none; filter:gra
 
 /* controls */
 .controls-row{display:flex; gap:8px; align-items:center; margin-bottom:8px}
-.input{padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.04); background:transparent; color:inherit}
-.btn{background:linear-gradient(90deg,var(--accent), var(--accent2)); color:#061519; border:none; padding:8px 12px; border-radius:10px; font-weight:700; cursor:pointer; box-shadow:0 8px 20px rgba(0,0,0,0.18)}
+.input{padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.04); background:transparent; color:inherit; font-size:1rem}
+.btn{background:linear-gradient(90deg,var(--accent), var(--accent2)); color:#061519; border:none; padding:10px 14px; border-radius:10px; font-weight:700; cursor:pointer; box-shadow:0 8px 20px rgba(0,0,0,0.18)}
 .btn.ghost{background:transparent; color:var(--muted); box-shadow:none; border:1px solid rgba(255,255,255,0.03)}
 .btn.small{padding:6px 8px; font-size:0.9rem}
 
 /* footer rotating phrases */
 .footer-rot {font-size:0.78rem; color:var(--muted); margin-top:8px; font-weight:800; text-align:center}
 
-/* misc */
-.kv{font-size:0.85rem; color:var(--muted)}
-.footer{font-size:0.78rem; color:var(--muted); margin-top:8px}
+/* responsive */
+@media (max-width:900px){
+  .container{grid-template-columns:1fr; padding:8px}
+  .sidebar{display:none}
+  .hamburger{display:inline-block}
+  .topbar{display:flex}
+  .main{padding:10px}
+  .btn{padding:12px 16px}
+  .input{padding:12px}
+  .flash-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+}
+
+/* mobile nav overlay */
+.mobile-nav{
+  position:fixed; inset:0; z-index:12000; display:none;
+  background:linear-gradient(180deg, rgba(2,6,12,0.6), rgba(2,6,12,0.9));
+}
+.mobile-nav .side{
+  width:84%; max-width:360px; height:100%; background:linear-gradient(180deg,#061827,#072638); padding:18px; box-shadow: 12px 0 40px rgba(0,0,0,0.6);
+  overflow:auto;
+}
+.mobile-nav .close{position:absolute; right:18px; top:18px; background:transparent; border:0; font-size:22px; color:var(--muted); cursor:pointer}
 
 /* animations */
 @keyframes shake{0%{transform:translateX(0)}25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-4px)}100%{transform:translateX(0)}}
-
-/* responsive */
-@media (max-width:900px){
-  .container{grid-template-columns:1fr; padding:12px}
-  .sidebar{order:2}
-}
-
-/* hamburger */
-.hamburger{
-  display:none;
-  background:transparent; border:0; color:var(--muted); font-size:22px; padding:6px 8px; border-radius:8px; cursor:pointer;
-}
-@media(max-width:900px){
-  .hamburger{display:inline-block}
-  .sidebar{position:fixed; left:0; top:0; bottom:0; z-index:10000; transform:translateX(-110%); transition:transform 280ms ease; width:260px; box-shadow: 12px 0 40px rgba(3,8,18,0.8)}
-  body.sidebar-open .sidebar{transform:translateX(0)}
-  /* dim main when sidebar open */
-  body.sidebar-open::before{content:''; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:9999}
-  /* ensure main is scrollable under overlay when closed */
-  .container{grid-template-columns: 0 1fr}
-  /* when sidebar visible, keep normal grid */
-  body.sidebar-open .container{grid-template-columns:260px 1fr}
-  /* hide large sidebar inside layout to avoid double space */
-  .sidebar{transform:translateX(-110%)}
-  body.sidebar-open .sidebar{transform:translateX(0)}
-}
-
 </style>
 </head>
 <body class="locked">
@@ -183,14 +187,32 @@ a.navlink.disabled{opacity:0.45; pointer-events:none; transform:none; filter:gra
   </div>
 </div>
 
-<div id="app" class="container" role="application" aria-label="Vocabulaire allemand">
-  <aside class="sidebar" aria-hidden="false">
-    <div class="brand">
-      <button id="hamburger" class="hamburger" aria-label="Ouvrir le menu">☰</button>
+<!-- mobile nav overlay -->
+<div id="mobileNav" class="mobile-nav" aria-hidden="true">
+  <div class="side" role="menu" aria-label="Menu mobile">
+    <button id="mobileClose" class="close" aria-label="Fermer le menu">✕</button>
+    <div style="height:18px"></div>
+    <div class="brand" style="margin-bottom:12px">
       <div class="logo">DE→FR</div>
       <div>
         <div class="h1">Vocabulaire Allemand</div>
-        <small class="kv">Patrie & Migration — v6b</small>
+      </div>
+    </div>
+    <nav class="nav mobile" aria-label="Navigation mobile">
+      <a class="navlink active" data-page="home">🏠 Accueil</a>
+      <a class="navlink" data-page="flash">🃏 Fiches</a>
+      <a class="navlink" data-page="match">🔀 Associer</a>
+      <a class="navlink" data-page="write">✍️ Écrire</a>
+    </nav>
+  </div>
+</div>
+
+<div id="app" class="container" role="application" aria-label="Vocabulaire allemand">
+  <aside class="sidebar" aria-hidden="false">
+    <div class="brand">
+      <div class="logo">DE→FR</div>
+      <div>
+        <div class="h1">Vocabulaire Allemand</div>
       </div>
     </div>
     <nav class="nav" aria-label="Menu principal">
@@ -208,6 +230,12 @@ a.navlink.disabled{opacity:0.45; pointer-events:none; transform:none; filter:gra
   </aside>
 
   <main class="main" id="main">
+    <div class="topbar">
+      <button id="hamb" class="hamburger" aria-label="Ouvrir le menu">☰</button>
+      <div style="flex:1"></div>
+      <div style="display:none" class="small-info kv">mobile controls</div>
+    </div>
+
     <!-- HOME -->
     <section id="page-home" class="page" aria-live="polite">
       <div class="header">
@@ -321,6 +349,10 @@ const cards = [
 
 function norm(s){ return s? s.toString().trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'') : '' }
 
+/* -------------------- quick helpers -------------------- */
+const $ = (sel, ctx=document) => ctx.querySelector(sel);
+const $$ = (sel, ctx=document) => Array.from(ctx.querySelectorAll(sel));
+
 /* -------------------- routing + nav lock -------------------- */
 const pages = document.querySelectorAll('.page');
 const navlinks = document.querySelectorAll('a.navlink');
@@ -334,10 +366,12 @@ navlinks.forEach(n=>{
     const page = n.dataset.page;
     if(!unlocked && page !== 'home'){
       bannerWrap.style.display = '';
+      closeMobileNav();
       return;
     }
     showPage(page);
     window.location.hash = page;
+    closeMobileNav();
   })
 });
 let initial = location.hash ? location.hash.replace('#','') : 'home';
@@ -345,7 +379,18 @@ if(!['home','flash','match','write'].includes(initial)) initial='home';
 showPage(initial);
 
 /* -------------------- header stats -------------------- */
-document.getElementById('totalCount').textContent = cards.length;
+$('#totalCount').textContent = cards.length;
+
+/* -------------------- mobile nav -------------------- */
+const mobileNav = $('#mobileNav');
+const hamb = $('#hamb');
+const mobileClose = $('#mobileClose');
+function openMobileNav(){ mobileNav.style.display='block'; mobileNav.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
+function closeMobileNav(){ mobileNav.style.display='none'; mobileNav.setAttribute('aria-hidden','true'); document.body.style.overflow='auto'; }
+hamb.addEventListener('click', openMobileNav);
+mobileClose.addEventListener('click', closeMobileNav);
+// close when tapping outside side (on overlay)
+mobileNav.addEventListener('click', (e)=>{ if(e.target===mobileNav) closeMobileNav(); });
 
 /* -------------------- LOCKING logic (stricter) -------------------- */
 let unlocked = false;
@@ -361,8 +406,6 @@ const footerRot = document.getElementById('footerRot');
 const rotPhrases = ["thomas le goat","alac le goat","webiste made by W.funk","Yıldızzzzzzz","Il note comme un M****"];
 let rotIndex = 0;
 setInterval(()=>{ footerRot.textContent = rotPhrases[rotIndex]; rotIndex = (rotIndex+1)%rotPhrases.length; }, 60000);
-
-/* removed hint functionality per request */
 
 function setUnlocked(v){
   unlocked = !!v;
@@ -381,17 +424,16 @@ function setUnlocked(v){
     exportBtn.classList.toggle('disabled', !unlocked);
   }
   // enable/disable match buttons
-  document.querySelectorAll('#newMatch,#shuffleMatch,#resetMatch,#revealAll').forEach(b=>{
+  $$('[id=newMatch],[id=shuffleMatch],[id=resetMatch],[id=revealAll]').forEach(b=>{
     if(b) b.disabled = !unlocked;
     if(b) b.classList.toggle('disabled', !unlocked);
   });
-  // update German visibility
   updateGermanVisibility();
 }
 
 function updateGermanVisibility(){
   // table german cells
-  document.querySelectorAll('.germText').forEach(el=>{
+  $$('.germText').forEach(el=>{
     const real = el.dataset.real || el.textContent;
     if(unlocked){
       el.textContent = real;
@@ -402,30 +444,31 @@ function updateGermanVisibility(){
     }
   });
   // flashcards: front locked badge
-  document.querySelectorAll('.card').forEach(card=>{
+  $$('.card').forEach(card=>{
+    const front = card.querySelector('.face.front');
     if(!unlocked){
       card.classList.add('front-locked');
-      const front = card.querySelector('.face.front');
       if(front && !front.querySelector('.lock-badge')){
         if(!front.dataset.real) front.dataset.real = front.textContent || front.dataset.real || '';
         front.innerHTML = '<span class="lock-badge">🔒 Accès restreint</span>';
       }
     } else {
       card.classList.remove('front-locked');
-      const front = card.querySelector('.face.front');
-      const g = front.dataset.real;
-      if(front && g){
-        front.innerHTML = '';
-        const span = document.createElement('span');
-        span.className = 'germText';
-        span.dataset.real = g;
-        span.textContent = g;
-        front.appendChild(span);
+      if(front){
+        const g = front.dataset.real || front.querySelector('.germText')?.dataset?.real;
+        if(g){
+          front.innerHTML = '';
+          const span = document.createElement('span');
+          span.className = 'germText';
+          span.dataset.real = g;
+          span.textContent = g;
+          front.appendChild(span);
+        }
       }
     }
   });
   // match left items locked state
-  document.querySelectorAll('#matchLeft .item').forEach(it=>{
+  $$('#matchLeft .item').forEach(it=>{
     if(!unlocked){
       if(!it.dataset.real) it.dataset.real = it.textContent;
       it.textContent = '🔒';
@@ -442,6 +485,7 @@ overlayClose.addEventListener('click', ()=>{
   overlay.style.display = 'none';
   bannerWrap.style.display = '';
   setUnlocked(false);
+  closeMobileNav();
 });
 pwSubmit.addEventListener('click', ()=>{
   const v = pwInput.value || '';
@@ -689,7 +733,7 @@ function newWrite(){
   else { writePrompt.textContent = pair[1]; writePrompt.dataset.expected = pair[0]; writePrompt.dataset.real = pair[1]; }
   writeInput.value=''; writeResult.textContent=''; writeInput.focus();
 }
-document.getElementById('newWrite').addEventListener('click', ()=>{
+$('#newWrite').addEventListener('click', ()=>{
   if(!unlocked){ alert('Déverrouille d\'abord pour lancer l\'exercice d\'écriture.'); return; }
   writePool = []; newWrite();
 });
@@ -719,7 +763,7 @@ function submitWrite(){
     }
   }
 }
-document.getElementById('submitWrite').addEventListener('click', submitWrite);
+$('#submitWrite').addEventListener('click', submitWrite);
 writeInput.addEventListener('keyup', (e)=>{ if(e.key==='Enter') submitWrite(); });
 
 /* -------------------- utils -------------------- */
@@ -733,32 +777,9 @@ document.addEventListener('keydown', (e)=>{
     e.preventDefault();
     const blob = new Blob([document.documentElement.outerHTML], {type:'text/html'});
     const href = URL.createObjectURL(blob);
-    const a = document.createElement('a'); a.href = href; a.download = 'vocab_patron_site_v6b.html'; document.body.appendChild(a); a.click(); a.remove();
+    const a = document.createElement('a'); a.href = href; a.download = 'vocab_patron_site_v7.html'; document.body.appendChild(a); a.click(); a.remove();
   }
 });
-
-// hamburger toggle for mobile
-const hamburger = document.getElementById('hamburger');
-hamburger && hamburger.addEventListener('click', ()=>{
-  document.body.classList.toggle('sidebar-open');
-});
-// close sidebar when clicking outside (overlay created when open)
-document.addEventListener('click', (e)=>{
-  if(!document.body.classList.contains('sidebar-open')) return;
-  const inside = e.target.closest('.sidebar') || e.target.closest('#hamburger');
-  if(!inside){
-    document.body.classList.remove('sidebar-open');
-  }
-});
-// close sidebar when a nav link is clicked (mobile)
-document.querySelectorAll('.nav a.navlink').forEach(a=>{
-  a.addEventListener('click', ()=>{
-    if(window.innerWidth <= 900) document.body.classList.remove('sidebar-open');
-  });
-});
-// also close sidebar when overlay close (if user uses overlay)
-overlayClose && overlayClose.addEventListener('click', ()=> document.body.classList.remove('sidebar-open'));
-
 </script>
 </body>
 </html>
