@@ -1,0 +1,719 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Vocabulaire Allemand — Patrie & Migration (v6b)</title>
+<style>
+:root{
+  --bg:#041323; --panel:#071826; --accent:#ff7a59; --accent2:#7c3aed; --muted:#9aa4b2;
+  --glass: rgba(255,255,255,0.03);
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  --radius:12px;
+  --card-w: 220px;
+}
+*{box-sizing:border-box}
+html,body,#app{height:100%}
+body{
+  margin:0; background:linear-gradient(180deg,#041323 0%, #081226 70%);
+  color:#e6eef6; display:flex; align-items:stretch; justify-content:center; padding:18px;
+}
+
+/* container */
+.container{
+  width:1150px; max-width:98vw; background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+  border-radius:18px; padding:18px; box-shadow: 0 12px 36px rgba(3,8,18,0.8);
+  display:grid; grid-template-columns:280px 1fr; gap:18px; min-height:72vh;
+  backdrop-filter: blur(6px) saturate(1.1);
+}
+
+/* sidebar */
+.sidebar{
+  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:var(--radius); padding:18px;
+  border:1px solid rgba(255,255,255,0.03); display:flex; flex-direction:column; gap:12px;
+}
+.brand{display:flex; align-items:center; gap:12px}
+.logo{
+  width:64px; height:64px; border-radius:14px; display:grid; place-items:center; font-weight:800;
+  background:linear-gradient(135deg,var(--accent), var(--accent2)); color:#021217; box-shadow: 0 8px 26px rgba(0,0,0,0.4);
+  transform: rotate(-6deg);
+}
+.h1{font-size:1.05rem; font-weight:800; letter-spacing:0.2px}
+.h1 small{display:block;font-size:0.78rem; color:var(--muted); margin-top:4px; font-weight:600}
+
+/* nav */
+.nav{margin-top:6px; display:flex; flex-direction:column; gap:6px}
+a.navlink{
+  display:flex; gap:10px; align-items:center; padding:10px 12px; border-radius:10px; text-decoration:none; color:inherit;
+  transition: all 220ms cubic-bezier(.2,.9,.3,1); font-weight:700; cursor:pointer;
+}
+a.navlink:hover{transform:translateX(6px); background:linear-gradient(90deg, rgba(255,255,255,0.02), transparent)}
+a.navlink.active{background:linear-gradient(90deg, rgba(127,90,255,0.06), rgba(255,122,89,0.03)); color: #fff}
+a.navlink.disabled{opacity:0.45; pointer-events:none; transform:none; filter:grayscale(.2)}
+
+/* stats */
+.stats{margin-top:auto; font-size:0.85rem; color:var(--muted); display:flex; gap:10px; flex-direction:column;}
+.stat{display:flex; justify-content:space-between; padding:8px; border-radius:8px; background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);}
+
+/* main */
+.main{padding:12px; border-radius:12px; background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00)); border:1px solid rgba(255,255,255,0.02); overflow:auto; position:relative}
+
+/* header */
+.header{display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px}
+.header h2{margin:0; font-size:1.1rem}
+.header .controls{display:flex; gap:8px}
+
+/* panels */
+.panel{background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent); padding:14px; border-radius:10px; margin-bottom:12px; border:1px solid rgba(255,255,255,0.02)}
+
+/* vocab table */
+.table-wrap{overflow:auto; border-radius:10px}
+.vocab-table{width:100%; border-collapse:collapse; min-width:700px}
+.vocab-table th, .vocab-table td{padding:10px 12px; text-align:left; border-bottom:1px solid rgba(255,255,255,0.02)}
+.vocab-table th{font-weight:800; color:var(--muted); font-size:0.9rem}
+.lock-icon{font-weight:900; color:var(--muted); opacity:0.9}
+
+/* flashcards improved */
+.flash-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(var(--card-w),1fr)); gap:18px; align-items:start}
+.card3d{perspective:1400px; height:160px; width:100%}
+.card {
+  width:100%; height:160px; transform-style:preserve-3d; transition: transform 650ms cubic-bezier(.2,.9,.3,1); border-radius:12px; position:relative; box-shadow: 0 12px 30px rgba(10,20,30,0.6); cursor:pointer;
+  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.03);
+}
+.card.flipped{transform:rotateY(180deg)}
+.face{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; padding:18px; backface-visibility:hidden; border-radius:12px; font-weight:800; font-size:1.05rem}
+.face.front{background:linear-gradient(135deg,#062936,#0b3246); color:#dff6ff; transform:translateZ(30px)}
+.face.back{transform:rotateY(180deg); background:linear-gradient(135deg,#16323a,#22333f); color:#fff; padding:18px}
+
+/* locked front style */
+.card.front-locked .face.front{display:flex; align-items:center; justify-content:center; font-size:1rem; color:var(--muted)}
+.card.front-locked .face.front .lock-badge{background:rgba(255,255,255,0.03); padding:8px 10px; border-radius:8px; display:inline-flex; gap:8px; align-items:center}
+
+/* match clickable */
+.match-area{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+.lang-list{display:grid; gap:10px; align-content:start}
+.item{padding:12px 14px; border-radius:10px; background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent); border:1px solid rgba(255,255,255,0.03); font-weight:800; cursor:pointer; user-select:none}
+.item.selected{outline:3px solid rgba(127,90,255,0.12); transform:translateY(-4px)}
+.item.correct{background:linear-gradient(90deg, rgba(100,255,180,0.06), rgba(79,209,197,0.02)); color: #061819; opacity:0.95}
+.item.wrong{animation:shake 500ms; background:linear-gradient(90deg, rgba(255,120,120,0.06), rgba(255,120,120,0.02)); color:#fff}
+.item.locked{filter:blur(3px) brightness(.9); pointer-events:none}
+
+/* input feedback */
+.input.correct{border-color: #34d399 !important; box-shadow: 0 8px 20px rgba(52,211,153,0.08); background: rgba(52,211,153,0.03)}
+.input.wrong{border-color: #fb7185 !important; animation: shake 400ms; box-shadow: 0 8px 20px rgba(251,113,133,0.06); background: rgba(251,113,133,0.03)}
+
+/* password modal & banner - strong blocking */
+.lock-overlay{
+  position:fixed; inset:0; display:grid; place-items:center; background:linear-gradient(180deg, rgba(2,6,12,0.95), rgba(2,6,12,0.92)); z-index:9999;
+}
+.lock-card{width:92%; max-width:520px; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:22px; border-radius:14px; text-align:center; border:1px solid rgba(255,255,255,0.04)}
+.lock-card h2{margin:0 0 12px 0}
+.lock-close{position:absolute; right:14px; top:14px; background:transparent; border:0; color:var(--muted); font-size:20px; cursor:pointer}
+
+/* banner */
+.lock-banner{width:100%; background:linear-gradient(90deg,#7c3aed 0%, #ff7a59 100%); color:#021217; padding:12px 18px; border-radius:10px; font-weight:800; display:flex; gap:12px; align-items:center; justify-content:space-between}
+
+/* controls */
+.controls-row{display:flex; gap:8px; align-items:center; margin-bottom:8px}
+.input{padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.04); background:transparent; color:inherit}
+.btn{background:linear-gradient(90deg,var(--accent), var(--accent2)); color:#061519; border:none; padding:8px 12px; border-radius:10px; font-weight:700; cursor:pointer; box-shadow:0 8px 20px rgba(0,0,0,0.18)}
+.btn.ghost{background:transparent; color:var(--muted); box-shadow:none; border:1px solid rgba(255,255,255,0.03)}
+.btn.small{padding:6px 8px; font-size:0.9rem}
+
+/* footer rotating phrases */
+.footer-rot {font-size:0.78rem; color:var(--muted); margin-top:8px; font-weight:800; text-align:center}
+
+/* misc */
+.kv{font-size:0.85rem; color:var(--muted)}
+.footer{font-size:0.78rem; color:var(--muted); margin-top:8px}
+
+/* animations */
+@keyframes shake{0%{transform:translateX(0)}25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-4px)}100%{transform:translateX(0)}}
+
+/* responsive */
+@media (max-width:900px){
+  .container{grid-template-columns:1fr; padding:12px}
+  .sidebar{order:2}
+}
+</style>
+</head>
+<body class="locked">
+<!-- overlay -->
+<div id="overlay" class="lock-overlay" role="dialog" aria-label="Écran de mot de passe">
+  <div class="lock-card" role="document">
+    <button id="overlayClose" class="lock-close" title="Fermer (affiche la bannière)">✕</button>
+    <h2>Entrez le mot de passe pour déverrouiller</h2>
+    <input id="pwInput" class="input" placeholder="Mot de passe" aria-label="Mot de passe"/>
+    <div style="display:flex; gap:8px; margin-top:10px; justify-content:center">
+      <button id="pwSubmit" class="btn">Entrer</button>
+    </div>
+    <p class="kv" style="margin-top:10px">Le mot de passe permet d'accéder aux mots allemands et d'activer l'export.</p>
+  </div>
+</div>
+
+<!-- banner -->
+<div id="bannerWrap" style="display:none; position:fixed; left:18px; right:18px; top:18px; z-index:9000">
+  <div class="lock-banner" id="lockBanner">
+    <div>🔒 Entrez le mot de passe pour déverrouiller les mots allemands.</div>
+    <div style="display:flex; gap:8px; align-items:center">
+      <input id="bannerInput" class="input" placeholder="Mot de passe..." style="min-width:160px"/>
+      <button id="bannerSubmit" class="btn small">Valider</button>
+    </div>
+  </div>
+</div>
+
+<div id="app" class="container" role="application" aria-label="Vocabulaire allemand">
+  <aside class="sidebar" aria-hidden="false">
+    <div class="brand">
+      <div class="logo">DE→FR</div>
+      <div>
+        <div class="h1">Vocabulaire Allemand</div>
+        <small class="kv">Patrie & Migration — v6b</small>
+      </div>
+    </div>
+    <nav class="nav" aria-label="Menu principal">
+      <a class="navlink active" data-page="home">🏠 Accueil</a>
+      <a class="navlink" data-page="flash">🃏 Fiches</a>
+      <a class="navlink" data-page="match">🔀 Associer</a>
+      <a class="navlink" data-page="write">✍️ Écrire</a>
+    </nav>
+    <div class="stats">
+      <div class="stat"><span>Entrées</span><strong id="totalCount">0</strong></div>
+      <div class="stat"><span>Progress</span><strong id="progress">0%</strong></div>
+      <div class="stat"><span>Score</span><strong id="score">0</strong></div>
+    </div>
+    <div id="footerRot" class="footer-rot">Verrouillage activé — entre le mot de passe pour tout débloquer.</div>
+  </aside>
+
+  <main class="main" id="main">
+    <!-- HOME -->
+    <section id="page-home" class="page" aria-live="polite">
+      <div class="header">
+        <h2>Tableau complet — Allemand ↔ Français</h2>
+        <div class="controls">
+          <button class="btn export" id="exportCsv" disabled>⬇ Export CSV</button>
+          <button class="btn ghost" id="printBtn">🖨️ Imprimer</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="controls-row">
+          <input id="search" class="input" placeholder="Rechercher mot allemand ou français..." />
+          <select id="filterArticle" class="input">
+            <option value="all">Tous</option>
+            <option value="der">der</option>
+            <option value="die">die</option>
+            <option value="das">das</option>
+            <option value="none">Sans article</option>
+          </select>
+          <button class="btn ghost" id="shuffleHome">🔀 Mélanger</button>
+          <div style="margin-left:auto" class="kv"><span id="shownCount">0</span> affichés</div>
+        </div>
+
+        <div class="table-wrap panel" style="padding:0">
+          <table class="vocab-table" id="vocabTable" aria-describedby="vocabDesc">
+            <thead><tr><th>Allemand</th><th>Français</th><th>Actions</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div id="vocabDesc" class="kv" style="margin-top:8px">🔊 : prononciation.</div>
+      </div>
+    </section>
+
+    <!-- FLASHCARDS -->
+    <section id="page-flash" class="page" style="display:none">
+      <div class="header">
+        <h2>Fiches — tous les mots</h2>
+        <div class="controls">
+          <button class="btn" id="shuffleFlash">🔀 Mélanger</button>
+          <button class="btn ghost" id="showAllBack">Afficher toutes les traductions</button>
+        </div>
+      </div>
+      <div class="panel" style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px">
+        <div class="kv">Clique sur une fiche pour la retourner.</div>
+        <div class="kv" id="flashProgress">0/0 vues</div>
+      </div>
+      <div class="panel flash-grid" id="flashGrid" aria-live="polite"></div>
+    </section>
+
+    <!-- MATCH -->
+    <section id="page-match" class="page" style="display:none">
+      <div class="header"><h2>Associer — clique sur le mot allemand puis sur sa traduction</h2><div class="controls"><button class="btn" id="newMatch">Nouvelle partie (16 mots)</button><button class="btn ghost" id="revealAll">Révéler réponses</button></div></div>
+      <div class="panel">
+        <div class="controls-row"><div class="kv">Clique d'abord sur une carte allemande (gauche), puis clique sur la traduction correspondante (droite).</div><div style="margin-left:auto" class="kv" id="matchStatus"></div></div>
+        <div class="match-area">
+          <div class="lang-list" id="matchLeft" aria-label="Allemand"></div>
+          <div class="lang-list" id="matchRight" aria-label="Français"></div>
+        </div>
+        <div style="display:flex; gap:8px; margin-top:10px">
+          <div class="kv" id="matchScore">Paires restantes: 0</div>
+          <div style="margin-left:auto">
+            <button class="btn" id="shuffleMatch">🔀 Mélanger</button>
+            <button class="btn ghost" id="resetMatch">Réinitialiser</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WRITE -->
+    <section id="page-write" class="page" style="display:none">
+      <div class="header"><h2>Écrire — écris la traduction</h2><div class="controls"><button class="btn" id="newWrite">Nouvelle</button></div></div>
+      <div class="panel">
+        <div id="writePrompt" style="font-size:1.25rem; font-weight:800"></div>
+        <div style="margin-top:10px" class="form-row">
+          <input id="writeInput" class="input" placeholder="Écris ici..." autocomplete="off" />
+          <button class="btn" id="submitWrite">Valider</button>
+          <div id="writeResult" class="feedback"></div>
+        </div>
+        <div class="kv" style="margin-top:10px">Astuce: majuscules et accents sont ignorés. Seule l'orthographe compte.</div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+/* -------------------- data -------------------- */
+const PASSWORD = '20/20lesgars';
+const cards = [
+  ["das Vaterland","la patrie"],
+  ["die Heimat","la patrie"],
+  ["zu Hause","das Heim — la maison"],
+  ["die Grenze","la frontière"],
+  ["die Konflikte","le conflit"],
+  ["die Kontakte","les contacts"],
+  ["die Globalisierung","la mondialisation"],
+  ["das Ghetto","le ghetto"],
+  ["die Migrationen","les migrations"],
+  ["die Migration","la migration"],
+  ["der Migrant","le migrant"],
+  ["das Exil","l'exil"],
+  ["die Gastfreundschaft","l'hospitalité"],
+  ["das Asylrecht","le droit à l'asile"],
+  ["der Schock der Kultur","le choc de la culture"],
+  ["der Kulturschock","le choc culturel"],
+  ["das Unverständnis","l'incompréhension"],
+  ["unsichtbare Grenzen","frontières invisibles"],
+  ["die Solidarität","la solidarité"],
+  ["die Transgression","la transgression"]
+];
+
+function norm(s){ return s? s.toString().trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'') : '' }
+
+/* -------------------- routing + nav lock -------------------- */
+const pages = document.querySelectorAll('.page');
+const navlinks = document.querySelectorAll('a.navlink');
+function showPage(id){
+  pages.forEach(p=>p.style.display = p.id===('page-'+id) ? '' : 'none');
+  navlinks.forEach(n=> n.classList.toggle('active', n.dataset.page===id));
+}
+navlinks.forEach(n=>{
+  n.addEventListener('click', (e)=>{
+    e.preventDefault();
+    const page = n.dataset.page;
+    if(!unlocked && page !== 'home'){
+      bannerWrap.style.display = '';
+      return;
+    }
+    showPage(page);
+    window.location.hash = page;
+  })
+});
+let initial = location.hash ? location.hash.replace('#','') : 'home';
+if(!['home','flash','match','write'].includes(initial)) initial='home';
+showPage(initial);
+
+/* -------------------- header stats -------------------- */
+document.getElementById('totalCount').textContent = cards.length;
+
+/* -------------------- LOCKING logic (stricter) -------------------- */
+let unlocked = false;
+const overlay = document.getElementById('overlay');
+const overlayClose = document.getElementById('overlayClose');
+const pwInput = document.getElementById('pwInput');
+const pwSubmit = document.getElementById('pwSubmit');
+const bannerWrap = document.getElementById('bannerWrap');
+const bannerInput = document.getElementById('bannerInput');
+const bannerSubmit = document.getElementById('bannerSubmit');
+const footerRot = document.getElementById('footerRot');
+
+const rotPhrases = ["thomas le goat","alac le goat","webiste made by W.funk","Yıldızzzzzzz","Il note comme un M****"];
+let rotIndex = 0;
+setInterval(()=>{ footerRot.textContent = rotPhrases[rotIndex]; rotIndex = (rotIndex+1)%rotPhrases.length; }, 60000);
+
+/* removed hint functionality per request */
+
+function setUnlocked(v){
+  unlocked = !!v;
+  document.body.classList.toggle('locked', !unlocked);
+  // nav links enabling
+  navlinks.forEach(n => {
+    if(unlocked) n.classList.remove('disabled');
+    else {
+      if(n.dataset.page !== 'home') n.classList.add('disabled');
+    }
+  });
+  // enable export
+  const exportBtn = document.querySelector('.btn.export');
+  if(exportBtn){
+    exportBtn.disabled = !unlocked;
+    exportBtn.classList.toggle('disabled', !unlocked);
+  }
+  // enable/disable match buttons
+  document.querySelectorAll('#newMatch,#shuffleMatch,#resetMatch,#revealAll').forEach(b=>{
+    if(b) b.disabled = !unlocked;
+    if(b) b.classList.toggle('disabled', !unlocked);
+  });
+  // update German visibility
+  updateGermanVisibility();
+}
+
+function updateGermanVisibility(){
+  // table german cells
+  document.querySelectorAll('.germText').forEach(el=>{
+    const real = el.dataset.real || el.textContent;
+    if(unlocked){
+      el.textContent = real;
+      el.classList.remove('masked');
+    } else {
+      el.textContent = '🔒';
+      el.classList.add('masked');
+    }
+  });
+  // flashcards: front locked badge
+  document.querySelectorAll('.card').forEach(card=>{
+    if(!unlocked){
+      card.classList.add('front-locked');
+      const front = card.querySelector('.face.front');
+      if(front && !front.querySelector('.lock-badge')){
+        if(!front.dataset.real) front.dataset.real = front.textContent || front.dataset.real || '';
+        front.innerHTML = '<span class="lock-badge">🔒 Accès restreint</span>';
+      }
+    } else {
+      card.classList.remove('front-locked');
+      const front = card.querySelector('.face.front');
+      const g = front.dataset.real;
+      if(front && g){
+        front.innerHTML = '';
+        const span = document.createElement('span');
+        span.className = 'germText';
+        span.dataset.real = g;
+        span.textContent = g;
+        front.appendChild(span);
+      }
+    }
+  });
+  // match left items locked state
+  document.querySelectorAll('#matchLeft .item').forEach(it=>{
+    if(!unlocked){
+      if(!it.dataset.real) it.dataset.real = it.textContent;
+      it.textContent = '🔒';
+      it.classList.add('locked');
+      if(it._clickHandler) it.removeEventListener('click', it._clickHandler);
+    } else {
+      if(it.dataset.real){ it.textContent = it.dataset.real; it.classList.remove('locked'); if(it._clickHandler) it.addEventListener('click', it._clickHandler); }
+    }
+  });
+}
+
+/* overlay actions */
+overlayClose.addEventListener('click', ()=>{
+  overlay.style.display = 'none';
+  bannerWrap.style.display = '';
+  setUnlocked(false);
+});
+pwSubmit.addEventListener('click', ()=>{
+  const v = pwInput.value || '';
+  if(v === PASSWORD){
+    overlay.style.display='none'; bannerWrap.style.display='none';
+    setUnlocked(true); localStorage.setItem('vocab_unlocked','1'); alert('Déverrouillé ✅');
+  } else { flashInputFeedback(pwInput,false); alert('Mot de passe incorrect'); }
+});
+bannerSubmit.addEventListener('click', ()=>{
+  const v = bannerInput.value || '';
+  if(v === PASSWORD){ bannerWrap.style.display='none'; setUnlocked(true); localStorage.setItem('vocab_unlocked','1'); alert('Déverrouillé ✅'); }
+  else { flashInputFeedback(bannerInput,false); alert('Mot de passe incorrect'); }
+});
+
+// try to restore state
+try{
+  const stored = localStorage.getItem('vocab_unlocked');
+  if(stored === '1'){ overlay.style.display='none'; bannerWrap.style.display='none'; setUnlocked(true); }
+  else { overlay.style.display=''; bannerWrap.style.display='none'; setUnlocked(false); }
+}catch(e){ overlay.style.display=''; bannerWrap.style.display='none'; setUnlocked(false); }
+
+/* -------------------- HOME table rendering -------------------- */
+const tbody = document.querySelector('#vocabTable tbody');
+const search = document.getElementById('search');
+const filterArticle = document.getElementById('filterArticle');
+const shownCount = document.getElementById('shownCount');
+
+function detectArticle(word){
+  const w = word.split(' ')[0].toLowerCase();
+  if(['der','die','das'].includes(w)) return w;
+  return 'none';
+}
+
+function renderTable(list){
+  tbody.innerHTML='';
+  list.forEach((pair, i)=>{
+    const g = pair[0], f = pair[1];
+    const tr = document.createElement('tr');
+    const article = detectArticle(g);
+    tr.innerHTML = `
+      <td><strong><span class="germText" data-real="${g}">${unlocked ? g : '🔒'}</span></strong> <span class="kv" style="margin-left:8px">(${article})</span></td>
+      <td>${f}</td>
+      <td>
+        <button class="btn ghost pron" data-lang="de" data-text="${g}">🔊 Allemand</button>
+        <button class="btn ghost pron" data-lang="fr" data-text="${f}">🔊 Français</button>
+      </td>`;
+    tbody.appendChild(tr);
+  });
+  shownCount.textContent = list.length;
+  updateGermanVisibility();
+}
+
+function filterAndRender(){
+  const q = norm(search.value);
+  const art = filterArticle.value;
+  let list = cards.slice();
+  if(art !== 'all'){
+    list = list.filter(p => (art==='none' ? detectArticle(p[0])==='none' : detectArticle(p[0])===art));
+  }
+  if(q){
+    list = list.filter(p => norm(p[0]).includes(q) || norm(p[1]).includes(q));
+  }
+  renderTable(list);
+}
+renderTable(cards);
+search.addEventListener('input', filterAndRender);
+filterArticle.addEventListener('change', filterAndRender);
+document.getElementById('shuffleHome').addEventListener('click', ()=>{ cards.sort(()=>Math.random()-0.5); filterAndRender(); });
+
+/* pronunciation (Web Speech API) */
+function speak(text, lang){
+  if(!("speechSynthesis" in window)){ alert('TTS non disponible dans ce navigateur.'); return; }
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = (lang==='de')? 'de-DE' : 'fr-FR';
+  const voices = speechSynthesis.getVoices();
+  const v = voices.find(x=> x.lang && x.lang.startsWith(utter.lang));
+  if(v) utter.voice = v;
+  speechSynthesis.cancel(); speechSynthesis.speak(utter);
+}
+document.querySelector('#vocabTable').addEventListener('click', (e)=>{
+  const btn = e.target.closest('button.pron');
+  if(!btn) return;
+  const lang = btn.dataset.lang; const text = btn.dataset.text;
+  if(!unlocked && lang==='de'){ alert('Mot allemand masqué — entre le mot de passe pour écouter.'); return; }
+  if(lang && text) speak(text, lang);
+});
+
+/* export CSV and print */
+function exportCSV(){
+  if(!unlocked){ alert('Déverrouille d\'abord pour exporter.'); return; }
+  const rows = [['Allemand','Français']].concat(cards.map(r=> [r[0], r[1]]));
+  const csv = rows.map(r => r.map(c=> `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv'});
+  const href = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = href; a.download = 'vocab_patron_csv.csv'; document.body.appendChild(a); a.click(); a.remove();
+}
+document.getElementById('exportCsv').addEventListener('click', exportCSV);
+
+/* helper: flash input feedback */
+function flashInputFeedback(el, ok){
+  if(!el) return;
+  el.classList.remove('wrong','correct');
+  void el.offsetWidth;
+  el.classList.add(ok? 'correct' : 'wrong');
+  setTimeout(()=> el.classList.remove(ok? 'correct' : 'wrong'), 900);
+}
+
+/* -------------------- FLASHCARDS (reimpl) -------------------- */
+const flashGrid = document.getElementById('flashGrid');
+const flashProgress = document.getElementById('flashProgress');
+function createCard(g,f){
+  const d = document.createElement('div'); d.className='card3d';
+  d.innerHTML = `<div class="card" role="button" tabindex="0">
+    <div class="face front" data-real="${g}"><span class="germText" data-real="${g}">${unlocked? g : '🔒'}</span></div>
+    <div class="face back">${f}</div>
+  </div>`;
+  const card = d.querySelector('.card');
+  card.addEventListener('click', ()=>{
+    card.classList.toggle('flipped');
+    updateFlashProgress();
+  });
+  card.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' ') { e.preventDefault(); card.click(); } });
+  return d;
+}
+function renderFlashcards(order){
+  flashGrid.innerHTML='';
+  const pool = order ? order : cards.slice();
+  pool.forEach(([g,f])=>{
+    const cd = createCard(g,f);
+    flashGrid.appendChild(cd);
+  });
+  updateGermanVisibility();
+  updateFlashProgress();
+}
+renderFlashcards();
+
+document.getElementById('shuffleFlash').addEventListener('click', ()=> { renderFlashcards(cards.slice().sort(()=>Math.random()-0.5)); });
+document.getElementById('showAllBack').addEventListener('click', ()=> {
+  const cardsEls = Array.from(document.querySelectorAll('.card'));
+  const anyNot = cardsEls.some(c=> !c.classList.contains('flipped'));
+  cardsEls.forEach(c=> c.classList.toggle('flipped', anyNot));
+  updateFlashProgress();
+});
+
+function updateFlashProgress(){
+  const all = document.querySelectorAll('.card');
+  const flipped = document.querySelectorAll('.card.flipped');
+  flashProgress.textContent = `${flipped.length}/${all.length} vues`;
+}
+
+/* -------------------- MATCH (clickable) - locked blocks interaction) -------------------- */
+let matchSet = [];
+let leftElements = {};
+let rightElements = {};
+let selectedLeft = null;
+const matchLeft = document.getElementById('matchLeft');
+const matchRight = document.getElementById('matchRight');
+const matchScoreEl = document.getElementById('matchScore');
+const matchStatus = document.getElementById('matchStatus');
+
+function startMatch(){
+  if(!unlocked){ alert('Déverrouille d\'abord pour jouer.'); return; }
+  const N = Math.min(16, cards.length);
+  const pool = cards.slice().sort(()=>Math.random()-0.5).slice(0,N);
+  matchSet = pool.slice();
+  const left = pool.map(p=>p[0]).sort(()=>Math.random()-0.5);
+  const right = pool.map(p=>p[1]).sort(()=>Math.random()-0.5);
+  matchLeft.innerHTML=''; matchRight.innerHTML='';
+  leftElements = {}; rightElements = {};
+  left.forEach(g=>{
+    const el = document.createElement('div'); el.className='item'; el.textContent = g; el.dataset.g = g;
+    el._clickHandler = ()=> onLeftClick(g, el);
+    el.addEventListener('click', el._clickHandler);
+    matchLeft.appendChild(el); leftElements[g]=el;
+  });
+  right.forEach(f=>{
+    const el = document.createElement('div'); el.className='item'; el.textContent = f; el.dataset.f = f;
+    el.addEventListener('click', ()=> onRightClick(f, el));
+    matchRight.appendChild(el); rightElements[f]=el;
+  });
+  matchScoreEl.textContent = `Paires restantes: ${matchSet.length}`;
+  matchStatus.textContent='';
+  selectedLeft = null;
+}
+function onLeftClick(g, el){
+  if(el.classList.contains('correct')) return;
+  if(el.classList.contains('selected')){ el.classList.remove('selected'); selectedLeft = null; return; }
+  if(selectedLeft && leftElements[selectedLeft]) leftElements[selectedLeft].classList.remove('selected');
+  selectedLeft = g; el.classList.add('selected');
+  matchStatus.textContent = 'Sélectionné';
+}
+function onRightClick(f, el){
+  if(!selectedLeft){ matchStatus.textContent = 'Choisis d\'abord un mot allemand.'; return; }
+  const pair = matchSet.find(p=> norm(p[0])===norm(selectedLeft) && norm(p[1])===norm(f));
+  if(pair){
+    const leftEl = leftElements[selectedLeft]; const rightEl = rightElements[f];
+    leftEl.classList.add('correct'); rightEl.classList.add('correct');
+    setTimeout(()=>{ leftEl.remove(); rightEl.remove(); matchSet = matchSet.filter(p=> !(norm(p[0])===norm(selectedLeft) && norm(p[1])===norm(f))); matchScoreEl.textContent = `Paires restantes: ${matchSet.length}`; selectedLeft=null; matchStatus.textContent='Correct ✅'; incrementScore(); updateProgress(); if(matchSet.length===0) matchStatus.textContent='Terminé — Bravo !'; }, 250);
+  } else {
+    el.classList.add('wrong'); if(leftElements[selectedLeft]) leftElements[selectedLeft].classList.add('wrong');
+    matchStatus.textContent = 'Faux — Essaie encore';
+    setTimeout(()=>{ el.classList.remove('wrong'); if(leftElements[selectedLeft]) leftElements[selectedLeft].classList.remove('wrong'); if(leftElements[selectedLeft]) leftElements[selectedLeft].classList.remove('selected'); selectedLeft=null; matchStatus.textContent=''; }, 700);
+  }
+}
+document.getElementById('newMatch').addEventListener('click', startMatch);
+document.getElementById('shuffleMatch').addEventListener('click', ()=> {
+  const leftList = Object.keys(leftElements).filter(k=> leftElements[k].parentNode).sort(()=>Math.random()-0.5);
+  const rightList = Object.keys(rightElements).filter(k=> rightElements[k].parentNode).sort(()=>Math.random()-0.5);
+  matchLeft.innerHTML=''; matchRight.innerHTML='';
+  leftList.forEach(g=> matchLeft.appendChild(leftElements[g]));
+  rightList.forEach(f=> matchRight.appendChild(rightElements[f]));
+});
+document.getElementById('resetMatch').addEventListener('click', startMatch);
+document.getElementById('revealAll').addEventListener('click', ()=>{
+  matchSet.forEach(p=>{
+    const g = p[0], f = p[1];
+    if(leftElements[g]) leftElements[g].classList.add('correct');
+    if(rightElements[f]) rightElements[f].classList.add('correct');
+  });
+  setTimeout(()=>{ matchSet.forEach(p=>{ if(leftElements[p[0]]) leftElements[p[0]].classList.remove('correct'); if(rightElements[p[1]]) rightElements[p[1]].classList.remove('correct'); }); }, 1500);
+});
+
+/* start initial match: don't auto-start if locked */
+if(unlocked) startMatch();
+
+/* -------------------- WRITE exercise (2 attempts, auto-advance) -------------------- */
+const writePrompt = document.getElementById('writePrompt');
+const writeInput = document.getElementById('writeInput');
+const writeResult = document.getElementById('writeResult');
+let currentWrite = null;
+let writePool = [];
+let attempts = 0;
+
+function pickNextWrite(){
+  if(!writePool.length) writePool = cards.slice().sort(()=>Math.random()-0.5);
+  return writePool.shift();
+}
+
+function newWrite(){
+  const pair = pickNextWrite();
+  const dir = Math.random()>0.5? 'de-fr' : 'fr-de';
+  currentWrite = {pair, dir};
+  attempts = 0;
+  if(dir==='de-fr'){ writePrompt.textContent = unlocked? pair[0] : '🔒'; writePrompt.dataset.expected = pair[1]; writePrompt.dataset.real = pair[0]; }
+  else { writePrompt.textContent = pair[1]; writePrompt.dataset.expected = pair[0]; writePrompt.dataset.real = pair[1]; }
+  writeInput.value=''; writeResult.textContent=''; writeInput.focus();
+}
+document.getElementById('newWrite').addEventListener('click', ()=>{
+  if(!unlocked){ alert('Déverrouille d\'abord pour lancer l\'exercice d\'écriture.'); return; }
+  writePool = []; newWrite();
+});
+
+function submitWrite(){
+  const attempt = writeInput.value;
+  const expected = writePrompt.dataset.expected || '';
+  if(!attempt){ flashInputFeedback(writeInput,false); writeResult.textContent='Écris quelque chose'; writeResult.style.color='var(--muted)'; return; }
+  const ok = norm(attempt) === norm(expected);
+  if(ok){
+    writeResult.textContent = '✅ Correct';
+    writeResult.style.color = 'lightgreen';
+    flashInputFeedback(writeInput,true);
+    incrementScore(); updateProgress();
+    setTimeout(()=>{ newWrite(); }, 650);
+  } else {
+    attempts++;
+    flashInputFeedback(writeInput,false);
+    writeResult.textContent = `❌ Faux — ${attempts<2? 'Essaye encore' : 'Réponse: '+expected}`;
+    writeResult.style.color = '#ffb4a6';
+    if(attempts>=2){
+      // advance to next word automatically
+      setTimeout(()=>{ newWrite(); }, 900);
+    } else {
+      // allow second try: clear input for retry
+      writeInput.value=''; writeInput.focus();
+    }
+  }
+}
+document.getElementById('submitWrite').addEventListener('click', submitWrite);
+writeInput.addEventListener('keyup', (e)=>{ if(e.key==='Enter') submitWrite(); });
+
+/* -------------------- utils -------------------- */
+function incrementScore(){ const el = document.getElementById('score'); el.textContent = String(Number(el.textContent||'0')+1); }
+function updateProgress(){ const score = Number(document.getElementById('score').textContent||'0'); const p = Math.min(100, Math.round(score / cards.length * 100)); document.getElementById('progress').textContent = p + '%'; }
+updateProgress();
+
+/* accessibility / save (Ctrl+S) */
+document.addEventListener('keydown', (e)=>{
+  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='s'){
+    e.preventDefault();
+    const blob = new Blob([document.documentElement.outerHTML], {type:'text/html'});
+    const href = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = href; a.download = 'vocab_patron_site_v6b.html'; document.body.appendChild(a); a.click(); a.remove();
+  }
+});
+</script>
+</body>
+</html>
